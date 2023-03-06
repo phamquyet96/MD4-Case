@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-declare var Account: mongoose.Model<{
+declare let Account: mongoose.Model<{
     username?: string;
     password?: string;
     role?: string;

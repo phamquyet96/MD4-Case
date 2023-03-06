@@ -193,16 +193,13 @@
     <div class="form register">
         <div class="form-content">
             <header>Register</header>
-            <form id="form-auth" action="/auth/register" method="post" >
+            <form id="form-auth" action="/auth/register" method="post" enctype="multipart/form-data" >
                 <div class="field input-field">
                     <input type="email" placeholder="Email" class="input" required name="username">
                 </div>
-                <div class="field input-field">
-                    <input type="password" placeholder="Create password" class="input" required name="password">
-                </div>
 
                 <div class="field input-field">
-                    <input type="password" placeholder="Confirm password" class="password" required name="password">
+                    <input type="password" placeholder="Create password" class="password" required name="password">
                     <i class='bx bx-hide eye-icon'></i>
                 </div>
 
@@ -227,7 +224,7 @@
 
         <div class="media-options">
             <a href="/auth/login/google" class="field google">
-                <img src="/src/views/images/google.png" alt="" class="google-img">
+                <img src="/images/google.png" alt="" class="google-img">
                 <span>Login with Google</span>
             </a>
         </div>

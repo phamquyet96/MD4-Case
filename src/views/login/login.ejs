@@ -196,7 +196,7 @@
     <div class="form login">
         <div class="form-content">
             <header>Login</header>
-            <form action="/auth/login" method="post" id="form-auth">
+            <form action="/auth/login" method="post" id="form-auth" enctype="multipart/form-data">
                 <div class="field input-field">
                     <input type="email" id="email" placeholder="Email" class="input" required name="username">
                 </div>
@@ -211,7 +211,7 @@
                 </div>
 
                 <div class="field button-field">
-                    <a href="/home"><button type="submit">Login</button></a>
+                    <button type="submit">Login</button>
                 </div>
             </form>
 
@@ -233,7 +233,7 @@
 
         <div class="media-options">
             <a href="/auth/login/google" class="field google">
-                <img src="/src/views/images/google.png" alt="" class="google-img">
+                <img src="/images/google.png" alt="" class="google-img">
                 <span>Login with Google</span>
             </a>
         </div>

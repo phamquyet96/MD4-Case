@@ -25,7 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Account = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-var Account = mongoose_1.default.model('account', new mongoose_1.Schema({ username: String, password: String, role: String, google_id: String, status: String
+let Account = mongoose_1.default.model('account', new mongoose_1.Schema({ username: String, password: String, role: String, google_id: String, status: String
 }, { collection: 'account' }));
 exports.Account = Account;
 //# sourceMappingURL=account.model.js.map
