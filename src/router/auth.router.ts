@@ -84,7 +84,7 @@ loginRoutes.post('/register', async (req: Request, res: Response) => {
         res.send("<script>alert(\" Incorrect email or password\"); window.location.href = \"/auth/register\"; </script>");
     }
 })
-loginRoutes.get('/verify', async  (req, res) => {
+loginRoutes.get('/verify', async  (req:any, res) => {
      bcrypt.compare(req.query.email, req.query.token, (err, result) => {
          if (result){
              console.log(result)
