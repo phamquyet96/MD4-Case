@@ -13,6 +13,7 @@ import {jwtauth} from "./src/middleware/jwtauth";
 import mailer from 'express-mailer';
 import * as dotenv from 'dotenv';
 import path from "path";
+import adminRoutes from "./src/router/admin.router";
 dotenv.config();
 
 
@@ -44,11 +45,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());
 app.use('/auth', loginRoutes);
+app.use('/admin',adminRoutes)
 app.use('/products', productRouter);
 // app.use('/products', jwtauth);
 
 // xử lí router
-app.get('/home', (req,res) => {
+app.get('/', (req,res) => {
     res.render('home_Template')
 })
 

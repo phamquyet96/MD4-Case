@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminController = void 0;
 const user_model_1 = require("../schemas/user.model");
-const account_model_1 = require("src/schemas/account.model");
+const account_model_1 = require("../schemas/account.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 class AdminController {
     static showListUserPage(arg0, showListUserPage) {
@@ -76,7 +76,6 @@ class AdminController {
     }
     static async addAdmin(req, res) {
         try {
-            console.log(user_model_1.UserModel);
             const user = await user_model_1.UserModel.findOne({ email: req.body.email });
             if (!user) {
                 const passwordHash = await bcrypt_1.default.hash(req.body.password, 10);
@@ -91,11 +90,7 @@ class AdminController {
             }
             else {
                 if (user.password === req.body.password) {
-<<<<<<< HEAD
-                    await user_model_1.UserModel.updateOne({ _id: user_model_1.UserModel.id }, { $set: { role: 'admin' } });
-=======
                     await user_model_1.UserModel.updateOne({ _id: user_model_1.UserModel["id"] }, { $set: { role: 'admin' } });
->>>>>>> master
                     res.redirect("/auth/login");
                 }
                 else {

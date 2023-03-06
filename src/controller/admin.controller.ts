@@ -1,5 +1,5 @@
 import { UserModel} from "../schemas/user.model";
-import { Account } from "src/schemas/account.model";
+import { Account } from "../schemas/account.model";
 import bcrypt from "bcrypt";
 
 export class AdminController {

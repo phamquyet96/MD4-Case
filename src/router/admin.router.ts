@@ -1,4 +1,4 @@
-import { AdminController } from "src/controller/admin.controller";
+import { AdminController } from "../controller/admin.controller";
 import { Router } from 'express';
 
 const adminRoutes = Router();
