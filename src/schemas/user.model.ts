@@ -9,6 +9,7 @@ interface IUser {
         id: {
             type: string,
         },
+    role:string;
     }
 }
 const userSchema = new Schema<IUser>({
@@ -20,7 +21,7 @@ const userSchema = new Schema<IUser>({
         id: {
             type: String,
         },
-
+    role:String,
     }
 })
 const UserModel = model<IUser>('User', userSchema);
