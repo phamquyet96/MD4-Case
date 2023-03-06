@@ -15,7 +15,7 @@ interface IAccount {
 }
 
 
-var Account = mongoose.model('account', new Schema({ username: String, password: String}, { collection : 'account' }));   // collection name;
+export var Account = mongoose.model('account', new Schema({ username: String, password: String}, { collection : 'account' }));   // collection name;
 
 
 const newaccount = new Account({ username: "Phuoccgmail1.com",password: "Phuocmai123"});
