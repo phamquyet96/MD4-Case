@@ -26,6 +26,8 @@
 interface IUser {
     username: string;
     password: string;
+    status: string;
+    id: number;
     google: {
         id: {
             type: string;

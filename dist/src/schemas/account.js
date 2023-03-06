@@ -8,10 +8,10 @@ mongoose.connect(db_url)
     .then(() => {
     console.log('db_connected');
 }).catch(error => {
-    console.log('db cnnection error: ', error.message);
+    console.log('db connection error: ', error.message);
 });
-var Account = mongoose.model('account', new mongoose_1.Schema({ username: String, password: String }, { collection: 'account' }));
-const newaccount = new Account({ username: "Phuoccgmail1.com", password: "Phuocmai123" });
-newaccount.save();
+let Account = mongoose.model('account', new mongoose_1.Schema({ username: String, password: String }, { collection: 'account' }));
+const newAccount = new Account({ username: "minh@gmail.com", password: "123" });
+newAccount.save();
 Account.find({}, function (err, data) { console.log(err, data, data.length); });
 //# sourceMappingURL=account.js.map

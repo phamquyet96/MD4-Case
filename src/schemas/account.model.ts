@@ -1,6 +1,6 @@
 import mongoose, {Schema, model} from "mongoose";
 
-interface IAccount {
+interface IAccountModel {
     username: String,
     password: String,
     role: "user",
@@ -9,8 +9,8 @@ interface IAccount {
 }
 
 
-var Account = mongoose.model('account', new Schema({ username: String, password: String, role: String, google_id: String, status: String
-}, { collection : 'account' }));   // collection name;
+let Account = mongoose.model('account', new Schema({ username: String, password: String, role: String, google_id: String, status: String
+}, { collection : 'account' }));
 
 export {Account}
 

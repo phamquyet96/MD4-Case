@@ -23,12 +23,12 @@ loginRoutes.get('/logout',cleanCookie,(req: Request, res: Response) => {
 loginRoutes.get('/login', (req: Request,res: Response) => {
     res.render('login/login')
 })
-loginRoutes.post('/login', async (req: any,res: Response, next) =>{
+loginRoutes.post('/login', async (req: Request,res: Response, next) =>{
     try{
         const account = await Account.findOne({username: req.body.username});
         if(account){
             if(account.status == "unverify"){
-                return res.send("<script>alert(\"Please check email!\"); window.location.href = \"/auth/login\"; </script>");
+                return res.send("<script>alert(\"Login success!\"); window.location.href = \"/home\"; </script>");
             } else if (account.status == "verify"){
                 let payload = {
                     user_id: account["id"],
@@ -49,10 +49,6 @@ loginRoutes.post('/login', async (req: any,res: Response, next) =>{
         return res.send("<script>alert(\"Error Server\"); window.location.href = \"/auth/login\"; </script>");
     }
 
-    //     req.login(user, () => {
-    //         res.send('you are authenticated')
-    //     })
-    // }) (req, res , next)
     }
 );
 loginRoutes.get('/register', (req: Request,res: Response) => {
@@ -71,28 +67,28 @@ loginRoutes.post('/register', async (req: Request, res: Response) => {
             await newAccount.save((err,newAccount) => {
             if(!err){
                 bcrypt.hash(newAccount.username, parseInt(process.env.BCRYPT_SALT_ROUND)).then((hashedEmail) => {
-                    mailer.sendMail(newAccount.username, "Xin Chào,Hãy xác thực tài khoản web nghe nhạc Online cùng Phước đẹp trai và Hoàng Nhật Bản", `<h4>Hãy Nhấn Vào Link Dưới Đây Để Xác Thực Email</h4>><br><a href="${process.env.APP_URL}/auth/verify?email=${newAccount.username}&token=${hashedEmail}"> Verify </a>`)
+                    mailer.sendMail(newAccount.username, "Welcome to Xtra Blog", `<h4>Please click this link</h4>><br><a href="${process.env.APP_URL}/auth/verify?email=${newAccount.username}&token=${hashedEmail}"> Verify </a>`)
                 });
             } else {
-               return res.send("<script>alert(\"Sai định dạng tên tài khoản hoặc mật khẩu vui lòng nhập lại \"); window.location.href = \"/auth/login\"; </script>");
+               return res.send("<script>alert(\"Incorrect email or password \"); window.location.href = \"/auth/login\"; </script>");
             }
             res.setHeader("Content-Type", "text/html");
-            res.send("<script>alert(\"Đăng kí thành công. Vui lòng truy cập Email xác thực tài khoản\"); window.location.href = \"/auth/login\"; </script>");
+            res.send("<script>alert(\"Register success!\"); window.location.href = \"/auth/login\"; </script>");
         });
         }
         else {res.send("<script>alert(\"This email already exists\"); window.location.href = \"/auth/register\"; </script>");}
     } catch (err){
-        res.send("<script>alert(\"Sai định dạng tên tài khoản hoặc mật khẩu vui lòng nhập lại \"); window.location.href = \"/auth/register\"; </script>");
+        res.send("<script>alert(\" Incorrect email or password\"); window.location.href = \"/auth/register\"; </script>");
     }
 })
-loginRoutes.get('/verify', async  (req, res) => {
+loginRoutes.get('/verify', async  (req:any, res) => {
      bcrypt.compare(req.query.email, req.query.token, (err, result) => {
          if (result){
              console.log(result)
          }
      })
     Account.updateOne({username: req.query.email}, { $set: { status: "verify" }}, (err, result) => {
-        res.send("<script>alert(\"Xác thực email thành công\"); window.location.href = \"/auth/login\"; </script>");
+        res.send("<script>alert(\"Account verification success!\"); window.location.href = \"/auth/login\"; </script>");
 
     })
 })
@@ -107,13 +103,13 @@ loginRoutes.post('/password/email', async (req, res ) => {
     } else {
         const accResetPass = await Account.findOne({username: req.body.email})
         if (accResetPass == null){
-            res.send("<script>alert(\"Email không tồn tại\"); window.location.href = \"/auth/password/reset\"; </script>");
+            res.send("<script>alert(\"Email no exist\"); window.location.href = \"/auth/password/reset\"; </script>");
         } else {
             bcrypt.hash(accResetPass.username, parseInt(process.env.BCRYPT_SALT_ROUND)).then((hashedEmail) => {
-                mailer.sendMail(accResetPass.username, "Đổi mật khẩu Web Chơi Nhạc Email", `<h4>Nhấn Vào Link Dưới Đây Để Chuyển Tiếp Tới Trang Đổi Mật Khẩu</h4>><br><a href="${process.env.APP_URL}/auth/password/reset/${accResetPass.username}?token=${hashedEmail}"> Reset Password </a>`)
+                mailer.sendMail(accResetPass.username, "Change password", `<h4>Nhấn Vào Link Dưới Đây Để Chuyển Tiếp Tới Trang Đổi Mật Khẩu</h4>><br><a href="${process.env.APP_URL}/auth/password/reset/${accResetPass.username}?token=${hashedEmail}"> Reset Password </a>`)
                 console.log(`${process.env.APP_URL}/password/reset/${accResetPass.username}?token=${hashedEmail}`);
             })
-            res.send("<script>alert(\"Vui Lòng Kiểm Tra Email Để Lấy Lại Mật Khẩu\"); window.location.href = \"/auth/login\"; </script>");
+            res.send("<script>alert(\"Please check email to get password\"); window.location.href = \"/auth/login\"; </script>");
         }
     }
 });
@@ -135,9 +131,9 @@ loginRoutes.post('/password/reset', (req,res) => {
             if (result == true) {
                     Account.updateOne({username: email}, { $set: { password: password }}, (err, result) => {
                         if (!err) {
-                            res.send("<script>alert(\"Đổi mật khẩu thành công\"); window.location.href = \"/auth/login\"; </script>");
+                            res.send("<script>alert(\"Change password success!\"); window.location.href = \"/auth/login\"; </script>");
                         } else {
-                            res.send("/500/ERORR");
+                            res.status(500);
                         }
                     })
             } else {
