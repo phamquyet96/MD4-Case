@@ -83,6 +83,8 @@ export class AdminController {
 
     static async addAdmin(req, res) {
         try {
+            console.log(UserModel);
+            
             const user = await UserModel.findOne({ email: req.body.email });
             if (!user) {
                 const passwordHash = await bcrypt.hash(req.body.password, 10);
@@ -96,7 +98,7 @@ export class AdminController {
                 res.redirect("/auth/login");
             } else {
                 if (user.password === req.body.password) {
-                    await UserModel.updateOne({ _id: UserModel["id"] }, { $set: { role: 'admin' } })
+                    await UserModel.updateOne({ _id: UserModel._id }, { $set: { role: 'admin' } })
                     res.redirect("/auth/login");
                 } else {
                     req.flash('error', 'Wrong password')

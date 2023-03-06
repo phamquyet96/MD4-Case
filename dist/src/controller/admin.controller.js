@@ -76,6 +76,7 @@ class AdminController {
     }
     static async addAdmin(req, res) {
         try {
+            console.log(user_model_1.UserModel);
             const user = await user_model_1.UserModel.findOne({ email: req.body.email });
             if (!user) {
                 const passwordHash = await bcrypt_1.default.hash(req.body.password, 10);
@@ -90,7 +91,11 @@ class AdminController {
             }
             else {
                 if (user.password === req.body.password) {
+<<<<<<< HEAD
+                    await user_model_1.UserModel.updateOne({ _id: user_model_1.UserModel.id }, { $set: { role: 'admin' } });
+=======
                     await user_model_1.UserModel.updateOne({ _id: user_model_1.UserModel["id"] }, { $set: { role: 'admin' } });
+>>>>>>> master
                     res.redirect("/auth/login");
                 }
                 else {
