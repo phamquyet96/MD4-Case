@@ -1,31 +1,47 @@
 import { UserModel } from "../schemas/user.model";
-import { Account } from "src/schemas/account.model";
+import { Account } from "../schemas/account.model";
+import {Blog} from "../schemas/blog.model";
+import loginRoutes from "../router/auth.router";
 
-export class UseerController {
-    static async getHome(req,res) {
-        let user = await UserModel.findById({_id: req.decoded.user.id});
-        let account = await Account.find({status: "public"});
-        res.render('user/home', {account: account, user: user});
+import * as bodyParser from "body-parser";
+import userRoutes from "../router/user.router";
+
+
+
+
+
+
+export class UserController {
+    static async showHomeUser(req,res){
+        res.render("user/userhome")
     }
+    // static async getHome(req,res) {
+    //     let user = await Account.findById({_id: req.decoded.user.id});
+    //     let account = await Account.find({status: "public"});
+    //     res.render('user/userhome', {account: account, user: user});
+    // }
 
     static async addBlogPage(req, res) {
-        let user = await UserModel.findById({_id: req.decoded.user.id});
-        res.render('user/blog', {user: user});
+        res.render('user/addblog');
     }
 
     static async addBlog(req, res) {
-        let user = await UserModel.findById({_id: req.decoded.user.id})
 
-            let account = new UserModel({
+        try {
+            console.log(req.body)
+
+            let blog = new Blog({
                 title: req.body.title,
                 content: req.body.content,
-                image: req.file.originalname,
                 status: req.body.status,
-                date: new Date(),
-                user: user._id
+                image:req.file.originalname,
+                date: req.body.date
             });
-            await account.save();
-            res.redirect("/user/home");
+             await blog.save();
+            res.redirect('/user/home');
+        }catch (e) {
+            console.log(e)
+        }
     }
 
     static async getBlog(req, res) {
@@ -109,3 +125,4 @@ export class UseerController {
 
     }
 }
+

@@ -1,20 +1,21 @@
 import {Router, Request, Response} from "express";
-const loginRoutes = Router();
 import multer from 'multer';
-const upload = multer();
 import * as bodyParser from "body-parser";
 import passport from "../middleware/passport";
 import {Account} from "../schemas/account.model";
-const fileupload = require('express-fileupload');
+const fileUpload = require('express-fileupload');
 import jwt from 'jsonwebtoken';
 import {cleanCookie} from "../middleware/cleanCookie";
 const mailer = require('../../utils/mailer');
 import bcrypt from 'bcrypt';
 import * as process from "process";
 
+const loginRoutes = Router();
+
+
 
 loginRoutes.use(bodyParser.json());
-loginRoutes.use(fileupload({ createParentPath: true }));
+loginRoutes.use(fileUpload({ createParentPath: true }));
 
 loginRoutes.get('/logout',cleanCookie,(req: Request, res: Response) => {
     res.redirect('/auth/login')
@@ -25,24 +26,31 @@ loginRoutes.get('/login', (req: Request,res: Response) => {
 })
 loginRoutes.post('/login', async (req: Request,res: Response, next) =>{
     try{
+        console.log(req.body)
         const account = await Account.findOne({username: req.body.username});
+
         if(account){
-            if(account.status == "unverify"){
-                return res.send("<script>alert(\"Login success!\"); window.location.href = \"/home\"; </script>");
-            } else if (account.status == "verify"){
-                let payload = {
-                    user_id: account["id"],
-                    username: account["username"],
-                    role: account["role"]
-                }
-                const token = jwt.sign(payload, '123456789', {
-                    expiresIn: 36000,
-                });
-                res.cookie("name", token )
-                res.redirect('/products/list')
+            let payload = {
+                user_id: account["id"],
+                username: account["username"],
+                password:account["password"],
+                role: account["role"]
             }
-        } else {
-            return res.send("<script>alert(\"Wrong Email or Password\"); window.location.href = \"/auth/login\"; </script>");
+            const token = jwt.sign(payload, '123456789', {
+                expiresIn: 36000,
+            });
+            if(req.body.password !== payload.password){
+                return res.send("<script>alert(\"Wrong Email or Password\"); window.location.href = \"/auth/login\"; </script>");
+            }else if (account.role == "admin"){
+                    res.cookie("name", token )
+                    res.redirect('/admin/home')
+                }else if(account.role == "user"){
+                    console.log(token)
+                    res.cookie("name", token )
+                    res.redirect('/user/home')
+                }
+        } else{
+            return res.send("<script>alert(\"Please create new account\"); window.location.href = \"/auth/register\"; </script>");
         }
     }
     catch (error){
@@ -83,6 +91,7 @@ loginRoutes.post('/register', async (req: Request, res: Response) => {
 })
 loginRoutes.get('/verify', async  (req:any, res) => {
      bcrypt.compare(req.query.email, req.query.token, (err, result) => {
+         console.log(result)
          if (result){
              console.log(result)
          }
@@ -146,7 +155,7 @@ loginRoutes.post('/password/reset', (req,res) => {
 
 loginRoutes.get('/login/google', passport.authenticate('google', {scope: ['profile','email']}));
 loginRoutes.get('/google/callback', passport.authenticate('google'), (req,res) => {
-    res.send('you are authenticated')
+    res.send("<script>alert(\"Login success!\"); window.location.href = \"/auth/login\"; </script>");
 })
 
 export default loginRoutes

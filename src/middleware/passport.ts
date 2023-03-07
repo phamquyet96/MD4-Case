@@ -1,8 +1,7 @@
 import passport from 'passport';
-import {UserModel} from '../schemas/user.model'
 import LocalStrategy from 'passport-local';
 import GoogleStragery from 'passport-google-oauth2';
-import {Account} from "../schemas/account.model";
+import {UserModel} from "../schemas/user.model";
 
 
 
@@ -14,16 +13,17 @@ passport.deserializeUser((user, done) => {
     done(null, user)
 });
 passport.use('local', new LocalStrategy(async (username, password, done) =>{
-    const user = await Account.findOne({username: username});
+    const user = await UserModel.findOne({username: username});
     if (!user){
         return done(null, false);
-    } else {
-        if (user.password == password){
-            return done(null, user);
-        } else {
-            return done(null, false)
-        }
     }
+    // else {
+    //     if (user.password == password){
+    //         return done(null, user);
+    //     } else {
+    //         return done(null, false)
+    //     }
+    // }
 }));
 passport.use(new GoogleStragery({
     clientID: '1079258411381-m5jfjtu1tn4cb1ugl8sdlvdf66n6espg.apps.googleusercontent.com',
@@ -33,12 +33,12 @@ passport.use(new GoogleStragery({
 },
     async (request, accessToken, refreshToken, profile, done) =>{
     try{
-        let existingUser = await Account.findOne({'google_id': profile.id});
+        let existingUser = await UserModel.findOne({'google_id': profile.id});
         console.log(typeof (profile.email))
         if(existingUser){
             return done(null,existingUser);
         } else {
-            const newUser = new Account({
+            const newUser = new UserModel({
                 google_id: profile.id,
                 username: profile.email,
                 password: "Abcd123456",
