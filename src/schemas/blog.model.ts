@@ -31,6 +31,7 @@
 import {Schema, model} from "mongoose"
 
 interface IBlog {
+    name:string;
     title:string;
     mode:string;
     avatar : string;
@@ -39,6 +40,7 @@ interface IBlog {
 
 };
 const blogSchema = new Schema<IBlog>({
+    name:String,
     title: String,
     mode:String,
     avatar : String,
