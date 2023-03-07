@@ -1,5 +1,4 @@
 import { UserModel} from "../schemas/user.model";
-import { Account } from "../schemas/account.model";
 import bcrypt from "bcrypt";
 
 export class AdminController {
@@ -16,7 +15,7 @@ export class AdminController {
         throw new Error("Method not implemented.");
     }
     static showHomePage (req,res) {
-        res.render('admin/home')
+        res.render('admin/adminhome')
     }
     static async showListUserModelPage (req,res) {
         let user = await UserModel.find()
@@ -33,7 +32,7 @@ export class AdminController {
         let id = req.params.id
         let user = await UserModel.findOne({ _id: id })
         console.log(user);
-        
+
         if (user.status === 'active') {
             await UserModel.updateOne({ _id: id },
                 {
@@ -59,21 +58,21 @@ export class AdminController {
     }
 
     static async showListAccount(req, res) {
-        let account = await Account.find().populate('user')
-        res.render('admin/listAccount', { Account: Account })
+        let user = await UserModel.find().populate('user')
+        res.render('admin/listAccount', { UserModel: UserModel })
     }
 
     static async deleteAccount(req, res) {
         let id = req.params.id
-        await Account.findOneAndDelete({ _id: id })
+        await UserModel.findOneAndDelete({ _id: id })
         res.redirect('/admin/list-account')
     }
 
     static async searchAccount(req, res) {
-        let account = await Account.find({
+        let user = await UserModel.find({
             title: { $regex: req.query.keyword }
         }).populate('user')
-        res.status(200).json(Account);
+        res.status(200).json(UserModel);
     }
 
     static async addAdminPage(req, res) {
@@ -94,15 +93,16 @@ export class AdminController {
                 }
                 await UserModel.create(userData);
                 res.redirect("/auth/login");
-            } else {
-                if (user.password === req.body.password) {
-                    await UserModel.updateOne({ _id: UserModel["id"] }, { $set: { role: 'admin' } })
-                    res.redirect("/auth/login");
-                } else {
-                    req.flash('error', 'Wrong password')
-                    res.redirect('/admin/add-admin')
-                }
             }
+            // else {
+            //     if (user.password === req.body.password) {
+            //         await UserModel.updateOne({ _id: UserModel["id"] }, { $set: { role: 'admin' } })
+            //         res.redirect("/auth/login");
+            //     } else {
+            //         req.flash('error', 'Wrong password')
+            //         res.redirect('/admin/add-admin')
+            //     }
+            // }
         } catch (err) {
             console.log(err.message);
         }

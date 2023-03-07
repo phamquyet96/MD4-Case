@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminController = void 0;
 const user_model_1 = require("../schemas/user.model");
-const account_model_1 = require("../schemas/account.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 class AdminController {
     static showListUserPage(arg0, showListUserPage) {
@@ -21,7 +20,7 @@ class AdminController {
         throw new Error("Method not implemented.");
     }
     static showHomePage(req, res) {
-        res.render('admin/home');
+        res.render('admin/adminhome');
     }
     static async showListUserModelPage(req, res) {
         let user = await user_model_1.UserModel.find();
@@ -56,19 +55,19 @@ class AdminController {
         res.status(200).json(user);
     }
     static async showListAccount(req, res) {
-        let account = await account_model_1.Account.find().populate('user');
-        res.render('admin/listAccount', { Account: account_model_1.Account });
+        let user = await user_model_1.UserModel.find().populate('user');
+        res.render('admin/listAccount', { UserModel: user_model_1.UserModel });
     }
     static async deleteAccount(req, res) {
         let id = req.params.id;
-        await account_model_1.Account.findOneAndDelete({ _id: id });
+        await user_model_1.UserModel.findOneAndDelete({ _id: id });
         res.redirect('/admin/list-account');
     }
     static async searchAccount(req, res) {
-        let account = await account_model_1.Account.find({
+        let user = await user_model_1.UserModel.find({
             title: { $regex: req.query.keyword }
         }).populate('user');
-        res.status(200).json(account_model_1.Account);
+        res.status(200).json(user_model_1.UserModel);
     }
     static async addAdminPage(req, res) {
         let error = req.flash().error || [];
@@ -87,16 +86,6 @@ class AdminController {
                 };
                 await user_model_1.UserModel.create(userData);
                 res.redirect("/auth/login");
-            }
-            else {
-                if (user.password === req.body.password) {
-                    await user_model_1.UserModel.updateOne({ _id: user_model_1.UserModel["id"] }, { $set: { role: 'admin' } });
-                    res.redirect("/auth/login");
-                }
-                else {
-                    req.flash('error', 'Wrong password');
-                    res.redirect('/admin/add-admin');
-                }
             }
         }
         catch (err) {
