@@ -27,20 +27,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const loginRoutes = (0, express_1.Router)();
-const multer_1 = __importDefault(require("multer"));
-const upload = (0, multer_1.default)();
 const bodyParser = __importStar(require("body-parser"));
 const passport_1 = __importDefault(require("../middleware/passport"));
 const account_model_1 = require("../schemas/account.model");
-const fileupload = require('express-fileupload');
+const fileUpload = require('express-fileupload');
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const cleanCookie_1 = require("../middleware/cleanCookie");
 const mailer = require('../../utils/mailer');
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const process = __importStar(require("process"));
+const loginRoutes = (0, express_1.Router)();
 loginRoutes.use(bodyParser.json());
-loginRoutes.use(fileupload({ createParentPath: true }));
+loginRoutes.use(fileUpload({ createParentPath: true }));
 loginRoutes.get('/logout', cleanCookie_1.cleanCookie, (req, res) => {
     res.redirect('/auth/login');
 });
@@ -49,26 +47,33 @@ loginRoutes.get('/login', (req, res) => {
 });
 loginRoutes.post('/login', async (req, res, next) => {
     try {
+        console.log(req.body);
         const account = await account_model_1.Account.findOne({ username: req.body.username });
         if (account) {
-            if (account.status == "unverify") {
-                return res.send("<script>alert(\"Login success!\"); window.location.href = \"/home\"; </script>");
+            let payload = {
+                user_id: account["id"],
+                username: account["username"],
+                password: account["password"],
+                role: account["role"]
+            };
+            const token = jsonwebtoken_1.default.sign(payload, '123456789', {
+                expiresIn: 36000,
+            });
+            if (req.body.password !== payload.password) {
+                return res.send("<script>alert(\"Wrong Email or Password\"); window.location.href = \"/auth/login\"; </script>");
             }
-            else if (account.status == "verify") {
-                let payload = {
-                    user_id: account["id"],
-                    username: account["username"],
-                    role: account["role"]
-                };
-                const token = jsonwebtoken_1.default.sign(payload, '123456789', {
-                    expiresIn: 36000,
-                });
+            else if (account.role == "admin") {
                 res.cookie("name", token);
-                res.redirect('/products/list');
+                res.redirect('/admin/home');
+            }
+            else if (account.role == "user") {
+                console.log(token);
+                res.cookie("name", token);
+                res.redirect('/user/home');
             }
         }
         else {
-            return res.send("<script>alert(\"Wrong Email or Password\"); window.location.href = \"/auth/login\"; </script>");
+            return res.send("<script>alert(\"Please create new account\"); window.location.href = \"/auth/register\"; </script>");
         }
     }
     catch (error) {
@@ -111,6 +116,7 @@ loginRoutes.post('/register', async (req, res) => {
 });
 loginRoutes.get('/verify', async (req, res) => {
     bcrypt_1.default.compare(req.query.email, req.query.token, (err, result) => {
+        console.log(result);
         if (result) {
             console.log(result);
         }
@@ -175,7 +181,7 @@ loginRoutes.post('/password/reset', (req, res) => {
 });
 loginRoutes.get('/login/google', passport_1.default.authenticate('google', { scope: ['profile', 'email'] }));
 loginRoutes.get('/google/callback', passport_1.default.authenticate('google'), (req, res) => {
-    res.send('you are authenticated');
+    res.send("<script>alert(\"Login success!\"); window.location.href = \"/auth/login\"; </script>");
 });
 exports.default = loginRoutes;
 //# sourceMappingURL=auth.router.js.map
