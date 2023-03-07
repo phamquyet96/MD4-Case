@@ -32,7 +32,6 @@ interface IUser {
         id: {
             type: string;
         };
-        role: string;
     };
 }
 declare const UserModel: import("mongoose").Model<IUser, {}, {}, {}, any>;

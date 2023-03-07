@@ -62,6 +62,7 @@ app.use(bodyParser.json());
 app.use('/auth', loginRoutes);
 app.use('/admin',adminRoutes);
 app.use('/user',userRoutes);
+app.use(adminBro.options.rootPath, router)
 
 
 
