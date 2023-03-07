@@ -11,6 +11,7 @@ const userSchema = new mongoose_1.Schema({
         id: {
             type: String,
         },
+        role: String,
     }
 });
 const UserModel = (0, mongoose_1.model)('User', userSchema);
