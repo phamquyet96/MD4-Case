@@ -21,19 +21,19 @@
 /// <reference types="mongoose/types/utility" />
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
+/// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
-import { Schema } from "mongoose";
-declare const UserModel: import("mongoose").Model<{
-    status: "active" | "locked";
-    role: "user" | "admin";
-    avatar: string;
-    blog: import("mongoose").Types.ObjectId[];
-    title?: string;
-}, {}, {}, {}, Schema<any, import("mongoose").Model<any, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, {
-    status: "active" | "locked";
-    role: "user" | "admin";
-    avatar: string;
-    blog: import("mongoose").Types.ObjectId[];
-    title?: string;
-}>>;
+interface IUser {
+    username: string;
+    password: string;
+    status: string;
+    id: number;
+    google: {
+        id: {
+            type: string;
+        };
+        role: string;
+    };
+}
+declare const UserModel: import("mongoose").Model<IUser, {}, {}, {}, any>;
 export { UserModel };

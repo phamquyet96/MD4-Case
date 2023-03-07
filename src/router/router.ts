@@ -1,6 +1,6 @@
 
 import authRoutes from "./auth.router";
-import userRoutes from "./product.router";
+import userRoutes from "./user.router";
 import { jwtauth } from "../middleware/jwtauth";
 // import { passport } from "../middleware/passport";
 
