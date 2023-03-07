@@ -1,7 +1,7 @@
 import { UserController } from "../controller/user.controller";
 import { Router } from 'express';
 import multer from "multer"
-import path from "path";
+import {jwtauth} from "../middleware/jwtauth";
 
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -15,7 +15,7 @@ let storage = multer.diskStorage({
 let upload = multer({ storage: storage });
 
 const userRoutes = Router()
-
+userRoutes.use(jwtauth)
 userRoutes.get('/home', UserController.showHomeUser)
 userRoutes.get('/add-blog', UserController.addBlogPage)
 userRoutes.post('/add-blog',upload.single('avatar'), UserController.addBlog)

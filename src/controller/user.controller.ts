@@ -1,6 +1,7 @@
 import { UserModel } from "../schemas/user.model";
 import { Account } from "../schemas/account.model";
 import {Blog} from "../schemas/blog.model";
+import {jwtauth} from "../middleware/jwtauth";
 import loginRoutes from "../router/auth.router";
 
 import * as bodyParser from "body-parser";
@@ -13,7 +14,9 @@ import userRoutes from "../router/user.router";
 
 export class UserController {
     static async showHomeUser(req,res){
-        res.render("user/userhome")
+        const accountUser = req.decoded.username;
+        const blog=await Blog.find();
+        res.render("user/userhome",{blog:blog, accountUser: accountUser})
     }
     // static async getHome(req,res) {
     //     let user = await Account.findById({_id: req.decoded.user.id});
@@ -31,10 +34,11 @@ export class UserController {
             console.log(req.body)
 
             let blog = new Blog({
+                name:req.body.name,
                 title: req.body.title,
                 content: req.body.content,
                 status: req.body.status,
-                image:req.file.originalname,
+                avatar:req.file.originalname,
                 date: req.body.date
             });
              await blog.save();
@@ -52,8 +56,8 @@ export class UserController {
     }
 
     static async getInfo(req, res) {
-        let user = await UserModel.findById({ _id: req.decoded.user_id })
-        res.render('user/info', { user: user });
+        // let user = await UserModel.findById({ _id: req.decoded.user_id })
+        res.render('user/info');
     }
 
     static async editUserPage(req, res) {
@@ -75,9 +79,9 @@ export class UserController {
     }
 
     static async myBlog(req, res) {
-        let user = await UserModel.findById({ _id: req.decoded.user_id })
-        let account = await Account.find({ user: req.decoded.user_id })
-        res.render('user/myBlog', { account: account, user: user });
+        // let user = await UserModel.findById({ _id: req.decoded.user_id })
+        // let account = await Account.find({ user: req.decoded.user_id })
+        res.render('user/myBlog' );
     }
 
     static async searchBlog1(req, res) {
