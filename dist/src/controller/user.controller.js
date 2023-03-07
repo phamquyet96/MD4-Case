@@ -6,9 +6,7 @@ const account_model_1 = require("../schemas/account.model");
 const blog_model_1 = require("../schemas/blog.model");
 class UserController {
     static async showHomeUser(req, res) {
-        const accountUser = req.decoded.username;
-        const blog = await blog_model_1.Blog.find();
-        res.render("user/userhome", { blog: blog, accountUser: accountUser });
+        res.render("user/userhome");
     }
     static async addBlogPage(req, res) {
         res.render('user/addblog');
@@ -17,11 +15,10 @@ class UserController {
         try {
             console.log(req.body);
             let blog = new blog_model_1.Blog({
-                name: req.body.name,
                 title: req.body.title,
                 content: req.body.content,
                 status: req.body.status,
-                avatar: req.file.originalname,
+                image: req.file.originalname,
                 date: req.body.date
             });
             await blog.save();
@@ -38,7 +35,8 @@ class UserController {
         res.render('user/blog', { account: account, user: user });
     }
     static async getInfo(req, res) {
-        res.render('user/info');
+        let user = await user_model_1.UserModel.findById({ _id: req.decoded.user_id });
+        res.render('user/info', { user: user });
     }
     static async editUserPage(req, res) {
         let user = await user_model_1.UserModel.findById({ _id: req.decoded.user_id });
@@ -57,7 +55,9 @@ class UserController {
         res.redirect('/user/info');
     }
     static async myBlog(req, res) {
-        res.render('user/myBlog');
+        let user = await user_model_1.UserModel.findById({ _id: req.decoded.user_id });
+        let account = await account_model_1.Account.find({ user: req.decoded.user_id });
+        res.render('user/myBlog', { account: account, user: user });
     }
     static async searchBlog1(req, res) {
         let account = await account_model_1.Account.find({

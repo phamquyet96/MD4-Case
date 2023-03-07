@@ -15,7 +15,20 @@ import userRoutes from "./src/router/user.router";
 import * as process from "process";
 import multer from "multer"
 dotenv.config();
+//AdminBro
+const AdminBro = require('admin-bro')
+import expressAdminBro from '@admin-bro/express';
+import mongooseAdminBro from '@admin-bro/mongoose';
 
+//Modelos
+import { UserModel } from "./src/schemas/user.model";
+import { Author } from "./src/schemas/author.model"; 
+
+AdminBro.registerAdapter(mongooseAdminBro)
+const AdminBroOptions = { resources: [UserModel, Author ] }
+
+const adminBro = new AdminBro(AdminBroOptions)
+const router = expressAdminBro.buildRouter(adminBro)
 
 // Connect Database
 const port = 8000;
@@ -26,7 +39,6 @@ app.set('views','./src/views');
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(cookieParser(process.env.USER_CODE_SECRET));
 app.use(express.static('public'))
-app.use(express.static('src/uploads'))
 const db_url = 'mongodb://127.0.0.1:27017/dbtest';
 mongoose.set('strictQuery', true)
 mongoose.connect(db_url)
@@ -57,6 +69,10 @@ app.use('/user',userRoutes);
 // xử lí router
 app.get('/', (req,res) => {
     res.render('home_Template')
+})
+
+app.get('/', (req, res) => {
+    res.send('Dashboard Node')
 })
 
 app.listen(port, () => {
