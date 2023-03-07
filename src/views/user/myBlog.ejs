@@ -1,13 +1,163 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css"> <!-- https://fontawesome.com/ -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet"> <!-- https://fonts.google.com/ -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/templatemo-xtra-blog.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.3.0/css/all.css">
+    <style>
+        .tm-header{
+            background-color: #1b1e21a1;
+        }
+        .tm-post-link-inner {
+            height: 500px;
+            width: 440px;
+        }
+        img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
 </head>
 <body>
-myblog
+<header class="tm-header" id="tm-header">
+    <div class="tm-header-wrapper">
+        <button class="navbar-toggler" type="button" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="tm-site-header">
+            <div class="mb-3 mx-auto tm-site-logo"><i style="font-size: 200% "class="fa-solid fa-user"></i></div>
+            <h1 class="text-center"></h1>
+        </div>
+        <nav class="tm-nav" id="tm-nav">
+            <ul>
+                <li class="tm-nav-item active"><a href="/user/my-blog" class="tm-nav-link">
+                        <i class="fas fa-home"></i>
+                        My blog
+                    </a></li>
+                <li class="tm-nav-item"><a href="/user/add-blog" class="tm-nav-link">
+                        <i class="fas fa-pen"></i>
+                        Write Blog
+                    </a></li>
+
+                <li class="tm-nav-item"><a href="" class="tm-nav-link">
+                        <i class="far fa-comments"></i>
+                        Update
+                    </a></li>
+
+
+                <li class="tm-nav-item"><a href="/" class="tm-nav-link">
+                        <i class="fas fa-users"></i>
+                        Log out
+                    </a></li>
+            </ul>
+        </nav>
+        <div class="tm-mb-65">
+            <a rel="nofollow" href="https://fb.com/templatemo" class="tm-social-link">
+                <i class="fab fa-facebook tm-social-icon"></i>
+            </a>
+            <a href="https://twitter.com" class="tm-social-link">
+                <i class="fab fa-twitter tm-social-icon"></i>
+            </a>
+            <a href="https://instagram.com" class="tm-social-link">
+                <i class="fab fa-instagram tm-social-icon"></i>
+            </a>
+            <a href="https://linkedin.com" class="tm-social-link">
+                <i class="fab fa-linkedin tm-social-icon"></i>
+            </a>
+        </div>
+        <p class="tm-mb-80 pr-5 text-white">
+            Xtra Blog is a multi-purpose HTML template from TemplateMo website. Left side is a sticky menu bar. Right side content will scroll up and down.
+        </p>
+    </div>
+    <div class="container-fluid">
+        <main class="tm-main">
+            <!-- Search form -->
+            <div class="row tm-row">
+                <div class="col-12">
+                    <form method="GET" class="form-inline tm-mb-80 tm-search-form">
+                        <input class="form-control tm-search-input" name="query" type="text" placeholder="Search..." aria-label="Search">
+                        <button class="tm-search-button" type="submit">
+                            <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</header>
+<div class="container-fluid">
+    <main class="tm-main">
+        <!-- Search form -->
+        <div class="row tm-row">
+            <div class="col-12">
+                <form method="GET" class="form-inline tm-mb-80 tm-search-form">
+                    <input class="form-control tm-search-input" name="query" type="text" placeholder="Search..." aria-label="Search">
+                    <button class="tm-search-button" type="submit">
+                        <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="row tm-row">
+            <div class="col-12">
+                <table class="table table-image">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Content</th>
+                        <th scope="col">Date</th>
+
+                        <th scope="col"></th>
+
+                    </tr>
+                    </thead>
+                    <tbody id="list-blog">
+                    <% blog.forEach((item, index) => { %>
+                        <tr>
+                            <th scope="row">
+                                <a href="/user/blog/<%= item._id %>"><%= index + 1 %>
+                                </a></th>
+
+                            <td class="w-20"><a href="/user/blog/<%= item._id %>"><%= item.title %> </a></td>
+                            <td class="w-20">
+                                <a href="/user/blog/<%= item._id %>"><img src="/image/<%= item.image %>" alt="" width="50px" height="50px"></a></td>
+                            <td class="w-20"><a href="/user/blog/<%= item._id %>"><%= item.content %></a></td>
+                            <td class="w-20">
+                                <a href="/user/blog/<%= item._id %>"><%= item.date.toLocaleTimeString() %>
+                                </a></td>
+                            <td>
+                                <a href="/user/update-blog/<%= item._id %>" class="btn btn-primary">Update</a>
+                                <a onclick="return confirm('Are you sure you want to delete this blog?')"
+                                   href="/user/delete-blog/<%= item._id %>" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </main>
+</div>
+
+
+
+
 </body>
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/templatemo-script.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </html>

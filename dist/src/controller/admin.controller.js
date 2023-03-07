@@ -23,51 +23,51 @@ class AdminController {
         res.render('admin/adminhome');
     }
     static async showListUserModelPage(req, res) {
-        let user = await user_model_1.UserModel.find();
+        let user = await user_model_1.User.find();
         res.render('admin/listUser', { user: user });
     }
     static async deleteUser(req, res) {
         let id = req.params.id;
-        await user_model_1.UserModel.findOneAndDelete({ _id: id });
+        await user_model_1.User.findOneAndDelete({ _id: id });
         res.redirect('/admin/list-user');
     }
     static async lockUser(req, res) {
         let id = req.params.id;
-        let user = await user_model_1.UserModel.findOne({ _id: id });
+        let user = await user_model_1.User.findOne({ _id: id });
         console.log(user);
         if (user.status === 'active') {
-            await user_model_1.UserModel.updateOne({ _id: id }, {
+            await user_model_1.User.updateOne({ _id: id }, {
                 $set: { status: 'locked' }
             });
             res.redirect('/admin/list-user');
         }
         else {
-            await user_model_1.UserModel.updateOne({ _id: id }, {
+            await user_model_1.User.updateOne({ _id: id }, {
                 $set: { status: 'active' }
             });
             res.redirect('/admin/list-user');
         }
     }
     static async searchUser(req, res) {
-        let user = await user_model_1.UserModel.find({
+        let user = await user_model_1.User.find({
             name: { $regex: req.query.keyword }
         });
         res.status(200).json(user);
     }
     static async showListAccount(req, res) {
-        let user = await user_model_1.UserModel.find().populate('user');
-        res.render('admin/listAccount', { UserModel: user_model_1.UserModel });
+        let user = await user_model_1.User.find().populate('user');
+        res.render('admin/listAccount', { UserModel: user_model_1.User });
     }
     static async deleteAccount(req, res) {
         let id = req.params.id;
-        await user_model_1.UserModel.findOneAndDelete({ _id: id });
+        await user_model_1.User.findOneAndDelete({ _id: id });
         res.redirect('/admin/list-account');
     }
     static async searchAccount(req, res) {
-        let user = await user_model_1.UserModel.find({
+        let user = await user_model_1.User.find({
             title: { $regex: req.query.keyword }
         }).populate('user');
-        res.status(200).json(user_model_1.UserModel);
+        res.status(200).json(user_model_1.User);
     }
     static async addAdminPage(req, res) {
         let error = req.flash().error || [];
@@ -75,7 +75,7 @@ class AdminController {
     }
     static async addAdmin(req, res) {
         try {
-            const user = await user_model_1.UserModel.findOne({ email: req.body.email });
+            const user = await user_model_1.User.findOne({ email: req.body.email });
             if (!user) {
                 const passwordHash = await bcrypt_1.default.hash(req.body.password, 10);
                 let userData = {
@@ -84,7 +84,7 @@ class AdminController {
                     role: 'admin',
                     password: passwordHash,
                 };
-                await user_model_1.UserModel.create(userData);
+                await user_model_1.User.create(userData);
                 res.redirect("/auth/login");
             }
         }

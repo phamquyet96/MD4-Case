@@ -1,52 +1,28 @@
+import { Schema, model } from "mongoose";
 
-// import { Schema, model } from "mongoose";
-//
-// const blogSchema = new Schema({
-//     title: String,
-//
-//     date: {
-//         type: Date,
-//         default: Date.now()
-//     },
-//
-//     content: String,
-//
-//     status: {
-//         type: String,
-//         default: "public",
-//         enum: ["public", "private"]
-//     },
-//
-//     image: {
-//         type: String,
-//         default: null,
-//     },
-//
-//
-// });
-//
-// export const Blog = model("Blog", blogSchema);
-//
-//
-import {Schema, model} from "mongoose"
-
-interface IBlog {
-    name:string;
-    title:string;
-    mode:string;
-    avatar : string;
-    content : string;
-    date : string;
-
-};
-const blogSchema = new Schema<IBlog>({
-    name:String,
+const blogSchema = new Schema({
     title: String,
-    mode:String,
-    avatar : String,
-    date : String,
-    content:String,
+
+    date: {
+        type: Date,
+        default: Date.now()
+    },
+
+    content: String,
+
+    status: {
+        type: String,
+    },
+
+    avatar: {
+        type: String,
+        default: null,
+    },
+
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+    },
 });
 
-const Blog = model<IBlog>('blog', blogSchema);
-export {Blog}
+export const Blog = model("Blog", blogSchema);

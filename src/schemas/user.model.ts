@@ -1,37 +1,13 @@
-import {Schema, model} from "mongoose";
+import mongoose, {Schema, model} from "mongoose";
 
-
-const userSchema = new Schema({
-
-
-    title:{
-        type:String
-    },
-
-    status: {
-        type: String,
-        default: 'active',
-        enum: ['active', "locked"]
-    },
-
-    role: {
-        type: String,
-        default: "user",
-        enum: ["user", "admin"]
-    },
-
-    avatar: {
-        type: String,
-        default: "/image/tree.jpg"
-    },
-
+let User = mongoose.model('User', new Schema({ name: String,email:String,google_id:String,address:String, password: String, role: String, avatar: String, status: String,
+    description:String,
     blog: [
         {
             type: Schema.Types.ObjectId,
             ref: "Blog"
         }
     ],
+}));
 
-})
-const UserModel = model('User', userSchema);
-export {UserModel}
+export {User}

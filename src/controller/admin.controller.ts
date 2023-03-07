@@ -1,4 +1,4 @@
-import { UserModel} from "../schemas/user.model";
+import { User} from "../schemas/user.model";
 import bcrypt from "bcrypt";
 
 export class AdminController {
@@ -18,30 +18,30 @@ export class AdminController {
         res.render('admin/adminhome')
     }
     static async showListUserModelPage (req,res) {
-        let user = await UserModel.find()
+        let user = await User.find()
         res.render('admin/listUser', {user: user})
     }
 
     static async deleteUser(req, res) {
         let id = req.params.id
-        await UserModel.findOneAndDelete({ _id: id })
+        await User.findOneAndDelete({ _id: id })
         res.redirect('/admin/list-user')
     }
 
     static async lockUser(req, res) {
         let id = req.params.id
-        let user = await UserModel.findOne({ _id: id })
+        let user = await User.findOne({ _id: id })
         console.log(user);
 
         if (user.status === 'active') {
-            await UserModel.updateOne({ _id: id },
+            await User.updateOne({ _id: id },
                 {
                     $set:
                         { status: 'locked' }
                 })
             res.redirect('/admin/list-user')
         } else {
-            await UserModel.updateOne({ _id: id },
+            await User.updateOne({ _id: id },
                 {
                     $set:
                         { status: 'active' }
@@ -51,28 +51,28 @@ export class AdminController {
     }
 
     static async searchUser(req, res) {
-        let user = await UserModel.find({
+        let user = await User.find({
             name: { $regex: req.query.keyword }
         })
         res.status(200).json(user);
     }
 
     static async showListAccount(req, res) {
-        let user = await UserModel.find().populate('user')
-        res.render('admin/listAccount', { UserModel: UserModel })
+        let user = await User.find().populate('user')
+        res.render('admin/listAccount', { UserModel: User })
     }
 
     static async deleteAccount(req, res) {
         let id = req.params.id
-        await UserModel.findOneAndDelete({ _id: id })
+        await User.findOneAndDelete({ _id: id })
         res.redirect('/admin/list-account')
     }
 
     static async searchAccount(req, res) {
-        let user = await UserModel.find({
+        let user = await User.find({
             title: { $regex: req.query.keyword }
         }).populate('user')
-        res.status(200).json(UserModel);
+        res.status(200).json(User);
     }
 
     static async addAdminPage(req, res) {
@@ -82,7 +82,7 @@ export class AdminController {
 
     static async addAdmin(req, res) {
         try {
-            const user = await UserModel.findOne({ email: req.body.email });
+            const user = await User.findOne({ email: req.body.email });
             if (!user) {
                 const passwordHash = await bcrypt.hash(req.body.password, 10);
                 let userData = {
@@ -91,7 +91,7 @@ export class AdminController {
                     role: 'admin',
                     password: passwordHash,
                 }
-                await UserModel.create(userData);
+                await User.create(userData);
                 res.redirect("/auth/login");
             }
             // else {

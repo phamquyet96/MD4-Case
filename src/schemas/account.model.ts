@@ -1,18 +1,15 @@
-import mongoose, {Schema, model} from "mongoose";
-
-interface IAccountModel {
-    username: String,
-    password: String,
-    role: "user",
-    google_id: String,
-    status: String
-}
-
-
-let Account = mongoose.model('account', new Schema({ username: String, password: String, role: String, google_id: String, status: String
-}, { collection : 'account' }));
-
-export {Account}
+// import mongoose, {Schema, model} from "mongoose";
+//
+// let User = mongoose.model('User', new Schema({ name: String,email:String, password: String, role: String, avatar: String, status: String,
+//     blog: [
+//         {
+//             type: Schema.Types.ObjectId,
+//             ref: "Blog"
+//         }
+//     ],
+// }, { collection : 'User' }));
+//
+// export {User}
 
 
 
