@@ -1,27 +1,13 @@
-import {Schema, model} from "mongoose";
+import mongoose, {Schema, model} from "mongoose";
 
-interface IUser {
-    username: string;
-    password: string;
-    status:string;
-    id:number;
-    google: {
-        id: {
-            type: string,
-        },
-    }
-}
-const userSchema = new Schema<IUser>({
-    username: String,
-    password: String,
-    status:String,
-    id:Number,
-    google: {
-        id: {
-            type: String,
-        },
-    }
-})
+let User = mongoose.model('User', new Schema({ name: String,email:String,google_id:String,address:String, password: String, role: String, avatar: String, status: String,
+    description:String,
+    blog: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Blog"
+        }
+    ],
+}));
 
-const UserModel = model<IUser>('User', userSchema);
-export {UserModel}
+export {User}

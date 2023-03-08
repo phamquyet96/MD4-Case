@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xtra Blog</title>
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="/fontawesome/css/all.min.css"> <!-- https://fontawesome.com/ -->
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet"> <!-- https://fonts.google.com/ -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -14,7 +14,7 @@
             background-color: #1b1e21a1;
         }
         .tm-post-link-inner {
-            height: 300px;
+            height: 500px;
             width: 440px;
         }
         img {
@@ -33,20 +33,20 @@
         </button>
         <div class="tm-site-header">
             <div class="mb-3 mx-auto tm-site-logo"><i style="font-size: 200% "class="fa-solid fa-user"></i></div>
-            <a href="/user/info"><h1 class="text-center"><%=accountUser%></h1></a>
+            <h1 class="text-center"></h1>
         </div>
         <nav class="tm-nav" id="tm-nav">
             <ul>
-                <li class="tm-nav-item active"><a href="/user/home" class="tm-nav-link">
+                <li class="tm-nav-item active"><a href="/user/my-blog" class="tm-nav-link">
                         <i class="fas fa-home"></i>
-                        News Feed
+                        My blog
                     </a></li>
                 <li class="tm-nav-item"><a href="/user/add-blog" class="tm-nav-link">
                         <i class="fas fa-pen"></i>
                         Write Blog
                     </a></li>
 
-                <li class="tm-nav-item"><a href="contact.html" class="tm-nav-link">
+                <li class="tm-nav-item"><a href="" class="tm-nav-link">
                         <i class="far fa-comments"></i>
                         Update
                     </a></li>
@@ -106,51 +106,68 @@
             </div>
         </div>
         <div class="row tm-row">
-            <% for (const blogs of blog ){%>
-            <article class="col-12 col-md-6 tm-post">
-                <hr class="tm-hr-primary">
-                <a href="post.html" class="effect-lily tm-post-link tm-pt-60">
-                    <div class="tm-post-link-inner">
-                        <img src="/<%=blogs.avatar%>" alt="Image" class="img-fluid">
+            <div class="main-product-thumbnail ptb-100 ptb-sm-60">
+                <div class="container">
+                    <div class="thumb-bg">
+                        <div class="row">
+                            <!-- Main Thumbnail Image Start -->
+                            <div class="col-lg-5 mb-all-40">
+                                <!-- Thumbnail Large Image start -->
+                                <div class="tab-content">
+                                    <div id="thumb1" class="tab-pane fade show active">
+                                        <a data-fancybox="images" href="/<%=blog.avatar%>"><img class="img-thumbnail"
+                                                                                                src="/<%=blog.avatar%>" alt="product-view"></a>
+                                    </div>
+
+                                </div>
+                                <!-- Thumbnail Large Image End -->
+                            </div>
+                            <!-- Main Thumbnail Image End -->
+                            <!-- Thumbnail Description Start -->
+                            <div class="col-lg-7">
+                                <div class="thubnail-desc fix">
+                                    <h3 class="product-header">
+                                        <%= blog.title%>
+                                    </h3>
+                                    <div class="rating-summary fix mtb-10">
+                                        <div class="rating">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star-o"></i>
+                                        </div>
+                                    </div>
+                                    <div class="pro-price mtb-30">
+                                        <p class="d-flex align-items-center"><span class="prev-price"></span><span
+                                                    class="price"><%= blog.content%></span></p>
+                                    </div>
+                                    <div class="pro-price mtb-30">
+                                        <p class="d-flex align-items-center"><span class="prev-price"></span><span
+                                                    class="price"><%= blog.date.toLocaleTimeString()%></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Thumbnail Description End -->
+
+                        </div>
+                        <!-- Row End -->
                     </div>
-                    <span class="position-absolute tm-new-badge">New</span>
-                    <h2 class="tm-pt-30 tm-color-primary tm-post-title"><%=blogs.title%></h2>
-                </a>
-                <p class="tm-pt-30">
-                    <%= blogs.content%>
-                </p>
-                <div class="d-flex justify-content-between tm-pt-45">
-                    <span class="tm-color-primary"><%=blogs.date%></span>
                 </div>
-            </article>
-            <%}%>
-        </div>
-        <div class="row tm-row tm-mt-100 tm-mb-75">
-            <div class="tm-paging-wrapper">
-                <span class="d-inline-block mr-3">Page</span>
-                <nav class="tm-paging-nav d-inline-block">
-                    <ul>
-                        <li class="tm-paging-item active">
-                            <a href="#" class="mb-2 tm-btn tm-paging-link">1</a>
-                        </li>
-                        <li class="tm-paging-item">
-                            <a href="#" class="mb-2 tm-btn tm-paging-link">2</a>
-                        </li>
-                        <li class="tm-paging-item">
-                            <a href="#" class="mb-2 tm-btn tm-paging-link">3</a>
-                        </li>
-                        <li class="tm-paging-item">
-                            <a href="#" class="mb-2 tm-btn tm-paging-link">4</a>
-                        </li>
-                    </ul>
-                </nav>
+                <!-- Container End -->
             </div>
         </div>
     </main>
 </div>
 
 
+
+
+</body>
+
 <script src="/js/jquery.min.js"></script>
 <script src="/js/templatemo-script.js"></script>
-</body>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </html>

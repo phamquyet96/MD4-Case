@@ -4,7 +4,7 @@
 import express from 'express';
 import * as bodyParser from "body-parser";
 import * as mongoose from "mongoose";
-import loginRoutes from "./src/router/auth.router";
+import authRoutes from "./src/router/auth.router";
 import passport from 'passport';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
@@ -59,7 +59,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());
-app.use('/auth', loginRoutes);
+app.use('/auth', authRoutes);
 app.use('/admin',adminRoutes);
 app.use('/user',userRoutes);
 app.use(adminBro.options.rootPath, router)
