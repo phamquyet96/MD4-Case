@@ -37,13 +37,13 @@
         </div>
         <nav class="tm-nav" id="tm-nav">
             <ul>
-                <li class="tm-nav-item active"><a href="/user/my-blog" class="tm-nav-link">
+                <li class="tm-nav-item active"><a href="/user/home" class="tm-nav-link">
                         <i class="fas fa-home"></i>
-                        My blog
+                        Home blog
                     </a></li>
-                <li class="tm-nav-item"><a href="/user/add-blog" class="tm-nav-link">
+                <li class="tm-nav-item"><a href="/user/info" class="tm-nav-link">
                         <i class="fas fa-pen"></i>
-                        Write Blog
+                        My Blog
                     </a></li>
 
                 <li class="tm-nav-item"><a href="" class="tm-nav-link">
@@ -129,10 +129,10 @@
 
                             <td class="w-20"><a href="/user/blog/<%= item._id %>"><%= item.title %> </a></td>
                             <td class="w-20">
-                                <a href="/user/blog/<%= item._id %>"><img src="/image/<%= item.image %>" alt="" width="50px" height="50px"></a></td>
+                                <a href="/user/blog/<%= item._id %>"><img src="/<%= item.avatar %>" alt="" width="150px" height="200px"></a></td>
                             <td class="w-20"><a href="/user/blog/<%= item._id %>"><%= item.content %></a></td>
                             <td class="w-20">
-                                <a href="/user/blog/<%= item._id %>"><%= item.date.toLocaleTimeString() %>
+                                <a href="/user/blog/<%= item._id %>"><%= item.date %>
                                 </a></td>
                             <td>
                                 <a href="/user/update-blog/<%= item._id %>" class="btn btn-primary">Update</a>

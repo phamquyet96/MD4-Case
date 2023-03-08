@@ -1,6 +1,8 @@
 import { Schema, model } from "mongoose";
 
 const blogSchema = new Schema({
+    user_id:String,
+
     title: String,
 
     date: {

@@ -26,6 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const validatePassword_1 = __importDefault(require("../middleware/validatePassword"));
 const express_1 = require("express");
 const bodyParser = __importStar(require("body-parser"));
 const passport_1 = __importDefault(require("../middleware/passport"));
@@ -85,33 +86,36 @@ authRoutes.get('/register', (req, res) => {
 });
 authRoutes.post('/register', async (req, res) => {
     try {
-        console.log(req.body);
         const user = await user_model_1.User.findOne({ name: req.body.name });
-        console.log(user);
-        if (!user) {
-            const newUser = new user_model_1.User({
-                name: req.body.name,
-                email: req.body.email,
-                password: req.body.password,
-                role: "user",
-                avatar: req.body.avatar,
-                address: req.body.address
-            });
-            await newUser.save((err, newUser) => {
-                if (!err) {
-                    bcrypt_1.default.hash(newUser.name, parseInt(process.env.BCRYPT_SALT_ROUND)).then((hashedEmail) => {
-                        mailer.sendMail(newUser.name, "Welcome to Xtra Blog", `<h4>Please click this link</h4>><br><a href="${process.env.APP_URL}/auth/verify?email=${newUser.name}&token=${hashedEmail}"> Verify </a>`);
-                    });
-                }
-                else {
-                    return res.send("<script>alert(\"Incorrect password \"); window.location.href = \"/auth/login\"; </script>");
-                }
-                res.setHeader("Content-Type", "text/html");
-                res.send("<script>alert(\"Register success!\"); window.location.href = \"/auth/login\"; </script>");
-            });
+        let validatePassword = validatePassword_1.default.check(req.body.password);
+        console.log(validatePassword);
+        if (validatePassword === "passwordValid") {
+            console.log(user);
+            if (!user) {
+                const newUser = new user_model_1.User({
+                    name: req.body.name,
+                    email: req.body.email,
+                    password: req.body.password,
+                    role: "user",
+                    avatar: req.body.avatar,
+                    address: req.body.address
+                });
+                await newUser.save((err, newUser) => {
+                    if (!err) {
+                        bcrypt_1.default.hash(newUser.name, parseInt(process.env.BCRYPT_SALT_ROUND)).then((hashedEmail) => {
+                            mailer.sendMail(newUser.name, "Welcome to Xtra Blog", `<h4>Please click this link</h4>><br><a href="${process.env.APP_URL}/auth/verify?email=${newUser.name}&token=${hashedEmail}"> Verify </a>`);
+                        });
+                    }
+                    res.setHeader("Content-Type", "text/html");
+                    res.send("<script>alert(\"Register success!\"); window.location.href = \"/auth/login\"; </script>");
+                });
+            }
+            else {
+                res.send("<script>alert(\"This email already exists\"); window.location.href = \"/auth/register\"; </script>");
+            }
         }
         else {
-            res.send("<script>alert(\"This email already exists\"); window.location.href = \"/auth/register\"; </script>");
+            return res.send("<script>alert(\"Incorrect password format \"); window.location.href = \"/auth/register\"; </script>");
         }
     }
     catch (err) {

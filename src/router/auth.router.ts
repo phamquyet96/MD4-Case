@@ -1,22 +1,5 @@
-//
-// import { AuthController } from "../controller/auth.controller";
-// import { Router } from 'express';
-// const authRoutes = Router();
-//
-//
-// authRoutes.get("/login", AuthController.showFormLogin);
-// authRoutes.post("/login", AuthController.login);
-//
-// authRoutes.get("/register", AuthController.showFormRegister);
-// authRoutes.post("/register", AuthController.register);
-//
-// authRoutes.get('/change-password', AuthController.changePasswordPage);
-// authRoutes.post('/change-password',AuthController.changePassword);
-//
-// authRoutes.get('/logout', AuthController.logout);
-//
-// export default authRoutes;
 
+import registerValidate from "../middleware/validatePassword"
 import {Router, Request, Response} from "express";
 import multer from 'multer';
 import * as bodyParser from "body-parser";
@@ -83,33 +66,35 @@ authRoutes.get('/register', (req: Request, res: Response) => {
 })
 authRoutes.post('/register', async (req: Request, res: Response) => {
     try{
-        console.log(req.body)
         const user = await User.findOne({name: req.body.name});
-        console.log(user)
-        if (!user) {
-            // const passwordHash = await bcrypt.hash(req.body.password, 10);
-            const newUser = new User({
-                name: req.body.name,
-                email:req.body.email,
-                password: req.body.password,
-                role: "user",
-                avatar:req.body.avatar,
-                address:req.body.address
+        let validatePassword=registerValidate.check(req.body.password)
+        console.log(validatePassword)
+        if (validatePassword === "passwordValid") {
+            console.log(user)
+            if (!user) {
+                const newUser = new User({
+                    name: req.body.name,
+                    email: req.body.email,
+                    password: req.body.password,
+                    role: "user",
+                    avatar: req.body.avatar,
+                    address: req.body.address
 
-            })
-            await newUser.save((err,newUser) => {
-                if(!err){
-                    bcrypt.hash(newUser.name, parseInt(process.env.BCRYPT_SALT_ROUND)).then((hashedEmail) => {
-                        mailer.sendMail(newUser.name, "Welcome to Xtra Blog", `<h4>Please click this link</h4>><br><a href="${process.env.APP_URL}/auth/verify?email=${newUser.name}&token=${hashedEmail}"> Verify </a>`)
-                    });
-                } else {
-                    return res.send("<script>alert(\"Incorrect password \"); window.location.href = \"/auth/login\"; </script>");
-                }
-                res.setHeader("Content-Type", "text/html");
-                res.send("<script>alert(\"Register success!\"); window.location.href = \"/auth/login\"; </script>");
-            });
+                })
+                await newUser.save((err, newUser) => {
+                    if (!err) {
+                        bcrypt.hash(newUser.name, parseInt(process.env.BCRYPT_SALT_ROUND)).then((hashedEmail) => {
+                            mailer.sendMail(newUser.name, "Welcome to Xtra Blog", `<h4>Please click this link</h4>><br><a href="${process.env.APP_URL}/auth/verify?email=${newUser.name}&token=${hashedEmail}"> Verify </a>`)
+                        });
+                    }
+                    res.setHeader("Content-Type", "text/html");
+                    res.send("<script>alert(\"Register success!\"); window.location.href = \"/auth/login\"; </script>");
+                });
+            }else {res.send("<script>alert(\"This email already exists\"); window.location.href = \"/auth/register\"; </script>");}
+        }else {
+            return res.send("<script>alert(\"Incorrect password format \"); window.location.href = \"/auth/register\"; </script>");
         }
-        else {res.send("<script>alert(\"This email already exists\"); window.location.href = \"/auth/register\"; </script>");}
+
     } catch (err){
         res.send("<script>alert(\" Incorrect email or password\"); window.location.href = \"/auth/register\"; </script>");
     }

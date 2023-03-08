@@ -6,7 +6,7 @@ const blog_model_1 = require("../schemas/blog.model");
 class UserController {
     static async showHomeUser(req, res) {
         const accountUser = req.decoded.name;
-        const blog = await blog_model_1.Blog.find();
+        const blog = await blog_model_1.Blog.find({ status: "Public" });
         res.render("user/home", { blog: blog, accountUser: accountUser });
     }
     static async addBlogPage(req, res) {
@@ -18,7 +18,8 @@ class UserController {
             content: req.body.content,
             status: req.body.status,
             avatar: req.file.originalname,
-            date: req.body.date
+            date: req.body.date,
+            user_id: req.decoded.user_id
         });
         console.log(blog);
         await blog.save();
@@ -40,22 +41,23 @@ class UserController {
     }
     static async editUser(req, res) {
         let id = req.params.id;
+        console.log(req.file);
         await user_model_1.User.findOneAndUpdate({ _id: id }, {
             $set: {
                 name: req.body.name,
                 address: req.body.address,
                 phone: req.body.phone,
-                avatar: req.file.originalname
+                avatar: req.file.originalname,
+                description: req.body.description
             }
         });
         res.redirect('/user/info');
     }
     static async myBlog(req, res) {
-        console.log(req.decoded.user_id);
         let user = await user_model_1.User.findById({ _id: req.decoded.user_id });
-        console.log(user);
-        let blog = await blog_model_1.Blog.find({ user: req.decoded.user_id });
-        console.log(blog);
+        let blog = await blog_model_1.Blog.find({});
+        console.log(1, user);
+        console.log(2, blog);
         res.render('user/myBlog', { user: user, blog: blog });
     }
     static async searchBlog1(req, res) {
@@ -84,12 +86,11 @@ class UserController {
     static async updateBlog(req, res) {
         try {
             let id = req.params.id;
-            console.log(req.body.image);
             await blog_model_1.Blog.findOneAndUpdate({ _id: id }, {
                 $set: {
                     title: req.body.title,
                     content: req.body.content,
-                    image: req.file.originalname,
+                    avatar: req.file.originalname,
                     status: req.body.status,
                 }
             });
