@@ -21,11 +21,11 @@ import expressAdminBro from '@admin-bro/express';
 import mongooseAdminBro from '@admin-bro/mongoose';
 
 //Modelos
-import { UserModel } from "./src/schemas/user.model";
+import { User } from "./src/schemas/user.model";
 import { Blog } from "./src/schemas/blog.model"; 
 
 AdminBro.registerAdapter(mongooseAdminBro)
-const AdminBroOptions = { resources: [UserModel, Blog ] }
+const AdminBroOptions = { resources: [User, Blog ] }
 
 const adminBro = new AdminBro(AdminBroOptions)
 const router = expressAdminBro.buildRouter(adminBro)
