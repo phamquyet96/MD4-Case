@@ -39,6 +39,7 @@ app.set('views','./src/views');
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(cookieParser(process.env.USER_CODE_SECRET));
 app.use(express.static('public'))
+app.use(express.static('src/uploads'))
 const db_url = 'mongodb://127.0.0.1:27017/dbtest';
 mongoose.set('strictQuery', true)
 mongoose.connect(db_url)

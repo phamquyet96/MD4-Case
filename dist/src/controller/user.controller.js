@@ -60,7 +60,7 @@ class UserController {
         console.log(2, blog);
         res.render('user/myBlog', { user: user, blog: blog });
     }
-    static async searchBlog1(req, res) {
+    static async searchBlog(req, res) {
         let blog = await blog_model_1.Blog.find({
             title: { $regex: req.query.keyword },
             user: req.decoded.user_id
@@ -86,6 +86,7 @@ class UserController {
     static async updateBlog(req, res) {
         try {
             let id = req.params.id;
+            console.log(req.file);
             await blog_model_1.Blog.findOneAndUpdate({ _id: id }, {
                 $set: {
                     title: req.body.title,

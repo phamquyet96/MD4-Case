@@ -7,7 +7,7 @@ export declare class UserController {
     static editUserPage(req: any, res: any): Promise<void>;
     static editUser(req: any, res: any): Promise<void>;
     static myBlog(req: any, res: any): Promise<void>;
-    static searchBlog1(req: any, res: any): Promise<void>;
+    static searchBlog(req: any, res: any): Promise<void>;
     static deleteBlog(req: any, res: any): Promise<void>;
     static updateBlogPage(req: any, res: any): Promise<void>;
     static updateBlog(req: any, res: any): Promise<void>;

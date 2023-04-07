@@ -73,7 +73,7 @@ export class UserController{
         res.render('user/myBlog', {user: user, blog: blog});
     }
 
-    static async searchBlog1(req,res){
+    static async searchBlog(req,res){
         let blog = await Blog.find({
             title: {$regex: req.query.keyword},
             user: req.decoded.user_id
@@ -101,6 +101,7 @@ export class UserController{
     static async updateBlog (req, res) {
         try {
             let id = req.params.id
+            console.log(req.file)
             await Blog.findOneAndUpdate({_id: id},{
                 $set: {
                     title: req.body.title,

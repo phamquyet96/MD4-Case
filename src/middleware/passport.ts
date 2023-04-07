@@ -26,8 +26,8 @@ passport.use('local', new LocalStrategy(async (name, password, done) =>{
     }
 }));
 passport.use(new GoogleStragery({
-    clientID: '441527544423-9q17279s72s1a0vsgbtv7h17nsj4htno.apps.googleusercontent.com',
-    clientSecret: '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',
+    clientID: '441527544423-2k0a7strau12sutqqp6g2va34j092vd2.apps.googleusercontent.com',
+    clientSecret: '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',
     callbackURL: 'http://localhost:8000/auth/google/callback',
     passReqToCallback: true
 },
