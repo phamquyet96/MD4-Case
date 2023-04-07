@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({extended:true}))
 app.use(cookieParser(process.env.USER_CODE_SECRET));
 app.use(express.static('public'))
 app.use(express.static('src/uploads'))
-const db_url: string = 'mongodb://127.0.0.1:27017/dbtest';
+const db_url: string = 'mongodb+srv://phamquyet9688:Ndh1dZTtcgn3GLin@blop-app.scmsaxj.mongodb.net/?retryWrites=true&w=majority';
 mongoose.set('strictQuery', true)
 mongoose.connect(db_url)
     .then(() => {
